@@ -5,6 +5,7 @@
 #include <string.h>
 #include <time.h>
 #include <netinet/ether.h>
+#include <unistd.h>
 #define ERROR_BUF_MAX 1024
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
@@ -12,6 +13,10 @@
 // pcap_if_t *lassi=chains->next;
 static void print_packet_info(u_char *args, struct pcap_pkthdr packet_header,const u_char *packet);
 int main(int arc ,char argv[]){
+if (geteuid() != 0) {
+        printf("NEED ROOT PRIVILEGES.\n");
+        return 1;
+}
 pcap_t *handle;
 int len = 1024;
 pcap_if_t *chains=NULL;
